@@ -1,0 +1,3 @@
+<launch>
+<node pkg="req_b_pkg" type="sensor_reading.py" name="sensor_reading" output="screen"></node>
+</launch>

@@ -1,0 +1,4 @@
+{
+    "cmake.sourceDirectory": "${workspaceFolder}/src/req_b_pkg",
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
+}
