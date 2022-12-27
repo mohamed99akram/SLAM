@@ -18,8 +18,13 @@ or
 `roslaunch req_b_pkg multi.launch`
 
 # To create a new message:
+Follow Document  
+if it needs dependencies:
 - change cmakelists.txt inside package
+	- generate_messages
+	- find_package
 - change package.xml
+	- build_depend
 - catkin_make
 
 
