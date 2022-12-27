@@ -17,4 +17,9 @@ or
 `source ./devel/setup.bash`  
 `roslaunch req_b_pkg multi.launch`
 
+# To create a new message:
+- change cmakelists.txt inside package
+- change package.xml
+- catkin_make
+
 
