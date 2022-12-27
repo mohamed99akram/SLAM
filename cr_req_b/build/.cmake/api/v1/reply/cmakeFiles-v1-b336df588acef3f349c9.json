@@ -820,6 +820,18 @@
 			"path" : "/opt/ros/noetic/share/roscpp/cmake/roscpp-msg-extras.cmake"
 		},
 		{
+			"isExternal" : true,
+			"path" : "/opt/ros/noetic/share/geometry_msgs/cmake/geometry_msgsConfig-version.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/opt/ros/noetic/share/geometry_msgs/cmake/geometry_msgsConfig.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/opt/ros/noetic/share/geometry_msgs/cmake/geometry_msgs-msg-extras.cmake"
+		},
+		{
 			"isGenerated" : true,
 			"path" : "/home/akram/CMP4/CR/Project/cr_req_b/build/req_b_pkg/catkin_generated/ordered_paths.cmake"
 		},
@@ -850,6 +862,10 @@
 		{
 			"isExternal" : true,
 			"path" : "/opt/ros/noetic/share/std_msgs/cmake/std_msgs-msg-paths.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/opt/ros/noetic/share/geometry_msgs/cmake/geometry_msgs-msg-paths.cmake"
 		},
 		{
 			"isExternal" : true,

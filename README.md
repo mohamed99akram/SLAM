@@ -7,7 +7,7 @@
 
 or 
 `cd cr_req`  
-`source ./devel/setup.bash`
+`source ./devel/setup.bash`  
 `rosrun cr_pkg control_wasd.py`  
 
 # launch sensors reader node

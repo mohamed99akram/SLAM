@@ -59,13 +59,20 @@ req_b_pkg/CMakeFiles/req_b_pkg_generate_messages_eus: /home/akram/CMP4/CR/Projec
 
 /home/akram/CMP4/CR/Project/cr_req_b/devel/share/roseus/ros/req_b_pkg/msg/HeaderAndReading.l: /opt/ros/noetic/lib/geneus/gen_eus.py
 /home/akram/CMP4/CR/Project/cr_req_b/devel/share/roseus/ros/req_b_pkg/msg/HeaderAndReading.l: /home/akram/CMP4/CR/Project/cr_req_b/src/req_b_pkg/msg/HeaderAndReading.msg
+/home/akram/CMP4/CR/Project/cr_req_b/devel/share/roseus/ros/req_b_pkg/msg/HeaderAndReading.l: /opt/ros/noetic/share/geometry_msgs/msg/Twist.msg
+/home/akram/CMP4/CR/Project/cr_req_b/devel/share/roseus/ros/req_b_pkg/msg/HeaderAndReading.l: /opt/ros/noetic/share/geometry_msgs/msg/Vector3.msg
+/home/akram/CMP4/CR/Project/cr_req_b/devel/share/roseus/ros/req_b_pkg/msg/HeaderAndReading.l: /opt/ros/noetic/share/geometry_msgs/msg/Pose.msg
 /home/akram/CMP4/CR/Project/cr_req_b/devel/share/roseus/ros/req_b_pkg/msg/HeaderAndReading.l: /opt/ros/noetic/share/std_msgs/msg/Header.msg
+/home/akram/CMP4/CR/Project/cr_req_b/devel/share/roseus/ros/req_b_pkg/msg/HeaderAndReading.l: /opt/ros/noetic/share/geometry_msgs/msg/Point.msg
+/home/akram/CMP4/CR/Project/cr_req_b/devel/share/roseus/ros/req_b_pkg/msg/HeaderAndReading.l: /opt/ros/noetic/share/geometry_msgs/msg/PoseWithCovariance.msg
+/home/akram/CMP4/CR/Project/cr_req_b/devel/share/roseus/ros/req_b_pkg/msg/HeaderAndReading.l: /opt/ros/noetic/share/geometry_msgs/msg/Quaternion.msg
+/home/akram/CMP4/CR/Project/cr_req_b/devel/share/roseus/ros/req_b_pkg/msg/HeaderAndReading.l: /opt/ros/noetic/share/geometry_msgs/msg/TwistWithCovariance.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/akram/CMP4/CR/Project/cr_req_b/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating EusLisp code from req_b_pkg/HeaderAndReading.msg"
-	cd /home/akram/CMP4/CR/Project/cr_req_b/build/req_b_pkg && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/akram/CMP4/CR/Project/cr_req_b/src/req_b_pkg/msg/HeaderAndReading.msg -Ireq_b_pkg:/home/akram/CMP4/CR/Project/cr_req_b/src/req_b_pkg/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p req_b_pkg -o /home/akram/CMP4/CR/Project/cr_req_b/devel/share/roseus/ros/req_b_pkg/msg
+	cd /home/akram/CMP4/CR/Project/cr_req_b/build/req_b_pkg && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/akram/CMP4/CR/Project/cr_req_b/src/req_b_pkg/msg/HeaderAndReading.msg -Ireq_b_pkg:/home/akram/CMP4/CR/Project/cr_req_b/src/req_b_pkg/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg -p req_b_pkg -o /home/akram/CMP4/CR/Project/cr_req_b/devel/share/roseus/ros/req_b_pkg/msg
 
 /home/akram/CMP4/CR/Project/cr_req_b/devel/share/roseus/ros/req_b_pkg/manifest.l: /opt/ros/noetic/lib/geneus/gen_eus.py
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/akram/CMP4/CR/Project/cr_req_b/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating EusLisp manifest code for req_b_pkg"
-	cd /home/akram/CMP4/CR/Project/cr_req_b/build/req_b_pkg && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py -m -o /home/akram/CMP4/CR/Project/cr_req_b/devel/share/roseus/ros/req_b_pkg req_b_pkg std_msgs
+	cd /home/akram/CMP4/CR/Project/cr_req_b/build/req_b_pkg && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py -m -o /home/akram/CMP4/CR/Project/cr_req_b/devel/share/roseus/ros/req_b_pkg req_b_pkg std_msgs geometry_msgs
 
 req_b_pkg_generate_messages_eus: req_b_pkg/CMakeFiles/req_b_pkg_generate_messages_eus
 req_b_pkg_generate_messages_eus: /home/akram/CMP4/CR/Project/cr_req_b/devel/share/roseus/ros/req_b_pkg/msg/HeaderAndReading.l

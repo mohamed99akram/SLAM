@@ -16,6 +16,8 @@
 #include <ros/message_operations.h>
 
 #include <std_msgs/Header.h>
+#include <geometry_msgs/PoseWithCovariance.h>
+#include <geometry_msgs/TwistWithCovariance.h>
 
 namespace req_b_pkg
 {
@@ -26,17 +28,17 @@ struct HeaderAndReading_
 
   HeaderAndReading_()
     : header()
+    , angles()
     , sensors_data()
-    , x(0.0)
-    , y(0.0)
-    , th(0.0)  {
+    , pose()
+    , twist()  {
     }
   HeaderAndReading_(const ContainerAllocator& _alloc)
     : header(_alloc)
+    , angles(_alloc)
     , sensors_data(_alloc)
-    , x(0.0)
-    , y(0.0)
-    , th(0.0)  {
+    , pose(_alloc)
+    , twist(_alloc)  {
   (void)_alloc;
     }
 
@@ -45,17 +47,17 @@ struct HeaderAndReading_
    typedef  ::std_msgs::Header_<ContainerAllocator>  _header_type;
   _header_type header;
 
+   typedef std::vector<double, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<double>> _angles_type;
+  _angles_type angles;
+
    typedef std::vector<double, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<double>> _sensors_data_type;
   _sensors_data_type sensors_data;
 
-   typedef double _x_type;
-  _x_type x;
+   typedef  ::geometry_msgs::PoseWithCovariance_<ContainerAllocator>  _pose_type;
+  _pose_type pose;
 
-   typedef double _y_type;
-  _y_type y;
-
-   typedef double _th_type;
-  _th_type th;
+   typedef  ::geometry_msgs::TwistWithCovariance_<ContainerAllocator>  _twist_type;
+  _twist_type twist;
 
 
 
@@ -87,10 +89,10 @@ template<typename ContainerAllocator1, typename ContainerAllocator2>
 bool operator==(const ::req_b_pkg::HeaderAndReading_<ContainerAllocator1> & lhs, const ::req_b_pkg::HeaderAndReading_<ContainerAllocator2> & rhs)
 {
   return lhs.header == rhs.header &&
+    lhs.angles == rhs.angles &&
     lhs.sensors_data == rhs.sensors_data &&
-    lhs.x == rhs.x &&
-    lhs.y == rhs.y &&
-    lhs.th == rhs.th;
+    lhs.pose == rhs.pose &&
+    lhs.twist == rhs.twist;
 }
 
 template<typename ContainerAllocator1, typename ContainerAllocator2>
@@ -147,12 +149,12 @@ struct MD5Sum< ::req_b_pkg::HeaderAndReading_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "a6826ae3bb61eb4a4d97f1f78b84604c";
+    return "e4192da5cbce5c6aa57f03ea8780bdfb";
   }
 
   static const char* value(const ::req_b_pkg::HeaderAndReading_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xa6826ae3bb61eb4aULL;
-  static const uint64_t static_value2 = 0x4d97f1f78b84604cULL;
+  static const uint64_t static_value1 = 0xe4192da5cbce5c6aULL;
+  static const uint64_t static_value2 = 0xa57f03ea8780bdfbULL;
 };
 
 template<class ContainerAllocator>
@@ -172,10 +174,12 @@ struct Definition< ::req_b_pkg::HeaderAndReading_<ContainerAllocator> >
   static const char* value()
   {
     return "Header header\n"
+"float64[] angles\n"
 "float64[] sensors_data\n"
-"float64 x\n"
-"float64 y\n"
-"float64 th \n"
+"\n"
+"geometry_msgs/PoseWithCovariance pose\n"
+"geometry_msgs/TwistWithCovariance twist\n"
+"\n"
 "================================================================================\n"
 "MSG: std_msgs/Header\n"
 "# Standard metadata for higher-level stamped data types.\n"
@@ -191,6 +195,71 @@ struct Definition< ::req_b_pkg::HeaderAndReading_<ContainerAllocator> >
 "time stamp\n"
 "#Frame this data is associated with\n"
 "string frame_id\n"
+"\n"
+"================================================================================\n"
+"MSG: geometry_msgs/PoseWithCovariance\n"
+"# This represents a pose in free space with uncertainty.\n"
+"\n"
+"Pose pose\n"
+"\n"
+"# Row-major representation of the 6x6 covariance matrix\n"
+"# The orientation parameters use a fixed-axis representation.\n"
+"# In order, the parameters are:\n"
+"# (x, y, z, rotation about X axis, rotation about Y axis, rotation about Z axis)\n"
+"float64[36] covariance\n"
+"\n"
+"================================================================================\n"
+"MSG: geometry_msgs/Pose\n"
+"# A representation of pose in free space, composed of position and orientation. \n"
+"Point position\n"
+"Quaternion orientation\n"
+"\n"
+"================================================================================\n"
+"MSG: geometry_msgs/Point\n"
+"# This contains the position of a point in free space\n"
+"float64 x\n"
+"float64 y\n"
+"float64 z\n"
+"\n"
+"================================================================================\n"
+"MSG: geometry_msgs/Quaternion\n"
+"# This represents an orientation in free space in quaternion form.\n"
+"\n"
+"float64 x\n"
+"float64 y\n"
+"float64 z\n"
+"float64 w\n"
+"\n"
+"================================================================================\n"
+"MSG: geometry_msgs/TwistWithCovariance\n"
+"# This expresses velocity in free space with uncertainty.\n"
+"\n"
+"Twist twist\n"
+"\n"
+"# Row-major representation of the 6x6 covariance matrix\n"
+"# The orientation parameters use a fixed-axis representation.\n"
+"# In order, the parameters are:\n"
+"# (x, y, z, rotation about X axis, rotation about Y axis, rotation about Z axis)\n"
+"float64[36] covariance\n"
+"\n"
+"================================================================================\n"
+"MSG: geometry_msgs/Twist\n"
+"# This expresses velocity in free space broken into its linear and angular parts.\n"
+"Vector3  linear\n"
+"Vector3  angular\n"
+"\n"
+"================================================================================\n"
+"MSG: geometry_msgs/Vector3\n"
+"# This represents a vector in free space. \n"
+"# It is only meant to represent a direction. Therefore, it does not\n"
+"# make sense to apply a translation to it (e.g., when applying a \n"
+"# generic rigid transformation to a Vector3, tf2 will only apply the\n"
+"# rotation). If you want your data to be translatable too, use the\n"
+"# geometry_msgs/Point message instead.\n"
+"\n"
+"float64 x\n"
+"float64 y\n"
+"float64 z\n"
 ;
   }
 
@@ -210,10 +279,10 @@ namespace serialization
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
       stream.next(m.header);
+      stream.next(m.angles);
       stream.next(m.sensors_data);
-      stream.next(m.x);
-      stream.next(m.y);
-      stream.next(m.th);
+      stream.next(m.pose);
+      stream.next(m.twist);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -235,18 +304,24 @@ struct Printer< ::req_b_pkg::HeaderAndReading_<ContainerAllocator> >
     s << indent << "header: ";
     s << std::endl;
     Printer< ::std_msgs::Header_<ContainerAllocator> >::stream(s, indent + "  ", v.header);
+    s << indent << "angles[]" << std::endl;
+    for (size_t i = 0; i < v.angles.size(); ++i)
+    {
+      s << indent << "  angles[" << i << "]: ";
+      Printer<double>::stream(s, indent + "  ", v.angles[i]);
+    }
     s << indent << "sensors_data[]" << std::endl;
     for (size_t i = 0; i < v.sensors_data.size(); ++i)
     {
       s << indent << "  sensors_data[" << i << "]: ";
       Printer<double>::stream(s, indent + "  ", v.sensors_data[i]);
     }
-    s << indent << "x: ";
-    Printer<double>::stream(s, indent + "  ", v.x);
-    s << indent << "y: ";
-    Printer<double>::stream(s, indent + "  ", v.y);
-    s << indent << "th: ";
-    Printer<double>::stream(s, indent + "  ", v.th);
+    s << indent << "pose: ";
+    s << std::endl;
+    Printer< ::geometry_msgs::PoseWithCovariance_<ContainerAllocator> >::stream(s, indent + "  ", v.pose);
+    s << indent << "twist: ";
+    s << std::endl;
+    Printer< ::geometry_msgs::TwistWithCovariance_<ContainerAllocator> >::stream(s, indent + "  ", v.twist);
   }
 };
 

@@ -1738,6 +1738,70 @@
 			"value" : "gmock_main"
 		},
 		{
+			"name" : "GMOCK_LIBRARY",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "GMOCK_LIBRARY-NOTFOUND"
+		},
+		{
+			"name" : "GMOCK_LIBRARY_DEBUG",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "GMOCK_LIBRARY_DEBUG-NOTFOUND"
+		},
+		{
+			"name" : "GMOCK_MAIN_LIBRARY",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "GMOCK_MAIN_LIBRARY-NOTFOUND"
+		},
+		{
+			"name" : "GMOCK_MAIN_LIBRARY_DEBUG",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "GMOCK_MAIN_LIBRARY_DEBUG-NOTFOUND"
+		},
+		{
 			"name" : "GMock_DIR",
 			"properties" : 
 			[
@@ -1888,6 +1952,18 @@
 			],
 			"type" : "FILEPATH",
 			"value" : "GTEST_MAIN_LIBRARY_DEBUG-NOTFOUND"
+		},
+		{
+			"name" : "GTest_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "The directory containing a CMake configuration file for GTest."
+				}
+			],
+			"type" : "PATH",
+			"value" : "GTest_DIR-NOTFOUND"
 		},
 		{
 			"name" : "INSTALL_GTEST",
@@ -2228,6 +2304,18 @@
 			],
 			"type" : "PATH",
 			"value" : "/opt/ros/noetic/share/genpy/cmake"
+		},
+		{
+			"name" : "geometry_msgs_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "The directory containing a CMake configuration file for geometry_msgs."
+				}
+			],
+			"type" : "PATH",
+			"value" : "/opt/ros/noetic/share/geometry_msgs/cmake"
 		},
 		{
 			"name" : "gmock_BINARY_DIR",

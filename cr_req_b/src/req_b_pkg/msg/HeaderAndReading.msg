@@ -1,5 +1,6 @@
 Header header
+float64[] angles
 float64[] sensors_data
-float64 x
-float64 y
-float64 th 
+
+geometry_msgs/PoseWithCovariance pose
+geometry_msgs/TwistWithCovariance twist

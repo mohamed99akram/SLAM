@@ -9,6 +9,7 @@ from req_b_pkg.msg import HeaderAndReading
 
 from nav_msgs.msg import Odometry
 from rospy.rostime import Time
+import numpy as np
 
 def rear_laser_callback(msg):
     print('rear: ', len(msg.ranges), type(msg.ranges))
@@ -23,7 +24,18 @@ def odom_callback(msg):
     print('odom: ', msg.pose.pose.position.x, msg.pose.pose.position.y)
 
 def hub_callback(front, rear, odom):
-    print('hub: ', front, rear, odom)
+    # print min and max of front and rear laser in deg
+    print('front: ', np.rad2deg(front.angle_min), np.rad2deg(front.angle_max))
+    print('rear: ', np.rad2deg(rear.angle_min), np.rad2deg(rear.angle_max))
+    msggg = HeaderAndReading()
+    msggg.pose = odom.pose
+    msggg.twist = odom.twist
+    # TODO fill in angles and ranges
+
+    # publish msggg to sensor_topic
+    pub = rospy.Publisher('/sensor_topic', HeaderAndReading, queue_size=10)
+    pub.publish(msggg)
+    # print('hub: ', front, rear, odom)
 
 
 def main():
