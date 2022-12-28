@@ -27,4 +27,7 @@ if it needs dependencies:
 	- build_depend
 - catkin_make
 
-
+# To run grid mapping:
+`cd cr_req_c`  
+`source ./devel/setup.bash`  
+`rosrun req_c_pkg grid_mapping.py`

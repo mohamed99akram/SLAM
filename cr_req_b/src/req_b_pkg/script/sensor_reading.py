@@ -5,23 +5,12 @@ from sensor_msgs.msg import LaserScan
 import message_filters
 # import HeaderAndReading
 
+from std_msgs.msg import String
 from req_b_pkg.msg import HeaderAndReading
 
 from nav_msgs.msg import Odometry
 from rospy.rostime import Time
 import numpy as np
-
-def rear_laser_callback(msg):
-    print('rear: ', len(msg.ranges), type(msg.ranges))
-    print('rear: ', msg.angle_increment)
-
-
-def front_laser_callback(msg):
-    print('front: ', len(msg.ranges), type(msg.ranges))
-    print('front: ', msg.angle_increment)
-
-def odom_callback(msg):
-    print('odom: ', msg.pose.pose.position.x, msg.pose.pose.position.y)
 
 def hub_callback(front, rear, odom):
     # print min and max of front and rear laser in deg
@@ -29,9 +18,11 @@ def hub_callback(front, rear, odom):
     # print('rear: ', np.rad2deg(rear.angle_min), np.rad2deg(rear.angle_max))
     # print('front: ', (front.angle_min), (front.angle_max))
     # print('rear: ', (rear.angle_min), (rear.angle_max))
+
     msggg = HeaderAndReading()
     msggg.pose = odom.pose
     msggg.twist = odom.twist
+    
     # Front
     front_angles_readings = list(zip(np.arange(front.angle_min, front.angle_max+front.angle_increment, front.angle_increment), front.ranges))
     # print("front1: ", [(np.rad2deg(a),b) for (a,b) in front_angles_readings])
@@ -52,13 +43,16 @@ def hub_callback(front, rear, odom):
     angles2, ranges2 = zip(*all_readings)
     msggg.angles = angles2
     msggg.sensors_data = ranges2
+    print(msggg.pose)
+    msggg.header.stamp = Time.now()
     # print('PRODUCED: ', list(zip(np.rad2deg(angles2), ranges2)))
     # print(len(all_readings))
     # publish msggg to sensor_topic
     pub = rospy.Publisher('/sensor_topic', HeaderAndReading, queue_size=10)
     pub.publish(msggg)
-    print('/sensor_topic written')
-    # print('hub: ', front, rear, odom)
+
+    print('position: ', odom.pose.pose.position)
+    print(f'/sensor_topic written')
 
 
 def main():

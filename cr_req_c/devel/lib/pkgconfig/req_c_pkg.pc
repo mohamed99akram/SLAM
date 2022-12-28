@@ -1,0 +1,8 @@
+prefix=/home/akram/CMP4/CR/Project/cr_req_c/devel
+
+Name: req_c_pkg
+Description: Description of req_c_pkg
+Version: 0.0.0
+Cflags: -I/home/akram/CMP4/CR/Project/cr_req_c/devel/include
+Libs: -L${prefix}/lib 
+Requires: 
