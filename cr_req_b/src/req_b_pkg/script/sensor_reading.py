@@ -38,14 +38,17 @@ def hub_callback(front, rear, odom):
     # [-135:135] -> [-45:45]
     rear_angles_readings = list(map(lambda x: (x[0] + (np.deg2rad(180) if x[0] < np.deg2rad(0) else np.deg2rad(-180)), x[1]), rear_angles_readings))
     # print('rear3: ', [(np.rad2deg(a), b) for (a,b) in rear_angles_readings])
-    all_readings = sorted(front_angles_readings + rear_angles_readings)
 
+    all_readings = front_angles_readings + rear_angles_readings
+    all_readings = sorted([x if x[0] >= 0 else (x[0] + np.deg2rad(360), x[1]) for x in all_readings])
+    # convert negative degrees to positive
     angles2, ranges2 = zip(*all_readings)
     msggg.angles = angles2
     msggg.sensors_data = ranges2
     print(msggg.pose)
     msggg.header.stamp = Time.now()
     # print('PRODUCED: ', list(zip(np.rad2deg(angles2), ranges2)))
+    # exit()
     # print(len(all_readings))
     # publish msggg to sensor_topic
     pub = rospy.Publisher('/sensor_topic', HeaderAndReading, queue_size=10)
