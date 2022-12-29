@@ -107,7 +107,8 @@ class GridMapper():
 
         if Time.now().to_sec() - self.prevTime > 1:
             self.update_map(angles, sensors_data, pose, yaw)
-            map_msg.data = list(np.array(l2p(self.grid_map)*100).astype(int).flatten())
+            # map_msg.data = list(np.array(l2p(self.grid_map)*100).astype(int).flatten())
+            map_msg.data = np.array(l2p(self.grid_map)*100).astype(int).flatten().tolist()
             self.prevTime = Time.now().to_sec()
             print('map sent')
         map_msg.header.stamp = Time.now()
