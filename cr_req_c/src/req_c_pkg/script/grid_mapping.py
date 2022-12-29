@@ -46,12 +46,14 @@ class GridMapper():
         x0 = pose.position.x
         y0 = pose.position.y
         for idx in range(len(angles)):
-            angle = angles[idx]
+            angle = angles[idx]+np.deg2rad(45)
             sensor_data = sensors_data[idx]
             if sensor_data <= 0 or sensor_data > self.max_range:
                 continue
-            x = x0 + sensor_data * np.cos(angle + yaw)
-            y = y0 + sensor_data * np.sin(angle + yaw)
+            x = x0 + sensor_data * np.cos(yaw - angle)
+            y = y0 + sensor_data * np.sin(yaw - angle)
+            # x = x0 + sensor_data * np.cos(angle + yaw)
+            # y = y0 + sensor_data * np.sin(angle + yaw)
             # target cell
             jt = int((x - self.map_center_x) / self.resolution)
             it = int((y - self.map_center_y) / self.resolution)
