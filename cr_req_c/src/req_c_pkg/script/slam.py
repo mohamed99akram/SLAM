@@ -11,6 +11,8 @@ from skimage.draw import line
 from scipy.stats import multivariate_normal
 
 # log odds to probability
+
+
 def l2p(log_odds):
     return 1 / (1 + np.exp(-log_odds))
 
@@ -18,12 +20,21 @@ def l2p(log_odds):
 # probability to log odds
 def p2l(prob):
     return np.log(prob / (1 - prob))
-    
+
+def normalize_angle(angle):
+
+    # while angle > np.pi:
+    #     angle = angle - 2. * np.pi
+
+    # while angle < -np.pi:
+    #     angle = angle + 2. * np.pi
+
+    return angle
 
 class Particle():
-    def __init__(self, num_particles, noise = 0.1):
+    def __init__(self, num_particles, noise=0.1):
 
-        self.noise = noise # dummy?
+        self.noise = noise  # dummy?
 
         # initialize robot pose at origin
         self.pose = np.vstack([0., 0., 0.])
@@ -46,33 +57,36 @@ class Particle():
 
         self.grid_map = np.ones((self.map_height, self.map_width)) * self.prior
 
-
-   # def prediction_step(self, u, dt):
-   #     # TODO check if this is correct from lecture
-   #     # u: speed, angular velocity
-   #     # dt: time interval
-   #     # a = 0.01
-   #     a = 0
-   #     print('particle got dt: ', dt)
-   #     # TODO maybe will put this equal to zero????
-   #     vel_noise_std = a * (u[0]**2) + a * (u[1]**2)
+    def prediction_step(self, u, dt):
+    	# TODO check if this is correct from lecture
+    	# u: speed, angular velocity
+    	# dt: time interval
+    	# a = 0.01
+        a = 0
+        print('particle got dt: ', dt)
+        # TODO maybe will put this equal to zero????
+        vel_noise_std = a * (u[0]**2) + a * (u[1]**2)
         # add sample noise to the control input
-   #     v = u[0] + np.random.normal(0, vel_noise_std)
-   #     w = u[1] + np.random.normal(0, vel_noise_std)
-    #    theta0 = self.pose[2]
-   #     # account for linear velocity only
-    #    if w == 0:
-    #        self.pose[0] += v * dt * np.cos(theta0)
-    #        self.pose[1] += v * dt * np.sin(theta0)
-    #    else:
-     #       self.pose[0] += v/w * (np.sin(theta0 + w*dt) - np.sin(theta0))
-    #        self.pose[1] += v/w * (-np.cos(theta0 + w*dt) + np.cos(theta0))
-    #    self.pose[2] += (w + np.random.normal(0, vel_noise_std))* dt #% (2 * np.pi)
+        v = u[0] + np.random.normal(0, vel_noise_std)
+        print('v = ', v)
+        w = u[1] + np.random.normal(0, vel_noise_std)
+        theta0 = self.pose[2]
+        # account for linear velocity only
+        # if w == 0:
+        self.pose[0] += v * dt * np.cos(theta0)
+        self.pose[1] += v * dt * np.sin(theta0)
+        self.pose[2] = normalize_angle(w * dt + theta0)
+        # else:
+        #     self.pose[0] += v/w * (np.sin(theta0 + w*dt) - np.sin(theta0))
+        #     self.pose[1] += v/w * (-np.cos(theta0 + w*dt) + np.cos(theta0))
+        # self.pose[2] += (w + np.random.normal(0, vel_noise_std))* dt #% (2 * np.pi)
     
-    def prediction_step(self, pose, yaw):
-    	self.pose[0] = pose.position.x
-    	self.pose[1] = pose.position.y
-    	self.pose[2] = yaw
+    # def prediction_step(self, u, dt, pose, yaw):
+    #     v = u[0]
+    #     w = u[1]
+    #     self.pose[0] = pose.position.x + np.random.normal(0, 1) * v
+    #     self.pose[1] = pose.position.y + np.random.normal(0, 1) * v
+    #     self.pose[2] = yaw + np.random.normal(0, 0.1) * w
 
 
     def scan_matching(self, angles, sensors_data):
@@ -85,7 +99,7 @@ class Particle():
             angle = angles[idx]+np.deg2rad(45)
             sensor_data = sensors_data[idx]
             if sensor_data <= 0 or sensor_data > self.max_range:
-                particle_distances.append(self.max_range)
+                particle_distances.append(sensor_data)
                 continue
             x = x0 + self.max_range * np.cos(yaw - angle)
             y = y0 + self.max_range * np.sin(yaw - angle)
@@ -141,21 +155,24 @@ class Particle():
                         self.grid_map[i, j] += self.inv_sensor_model_free - self.prior
             
 
-    def correction_step(self,angles, sensor_data):
+    def correction_step(self,angles, sensor_data, pose, yaw):
         # update particle map, weights
         # TODO merge update_map and scan_matching into one function
- 
+        alpha = 0.75
+        self.pose[0] += alpha * (pose.position.x - self.pose[0])
+        self.pose[1] += alpha * (pose.position.y - self.pose[1])
+        self.pose[2] += alpha * (yaw - self.pose[2])
         # update weights (scan_matching) (z_expected - z_actual) -> gaussain? inverse?
-        particle_distances = self.scan_matching(angles, sensor_data)
-        Q_t = 0.1 * np.identity(2)
-        # penalize weight by distance from sensor data
-        # TODO what penality function to use?
-        # query_dist = np.linalg.norm(particle_distances - sensor_data)
-        query_dist = particle_distances.T
-        mean = np.array(sensor_data).T
-        cov = Q_t # won't work, would it?
-        # cov = 1
-        self.weight *= multivariate_normal.pdf(query_dist, mean=mean)
+        # particle_distances = self.scan_matching(angles, sensor_data)
+        # Q_t = 0.1 * np.identity(2)
+        # # penalize weight by distance from sensor data
+        # # TODO what penality function to use?
+        # # query_dist = np.linalg.norm(particle_distances - sensor_data)
+        # query_dist = particle_distances.T
+        # mean = np.array(sensor_data).T
+        # cov = Q_t # won't work, would it?
+        # # cov = 1
+        # self.weight *= multivariate_normal.pdf(query_dist, mean=mean)
         # update map
         self.update_map(angles, sensor_data)
         # resample??
@@ -178,7 +195,7 @@ class SLAM():
         rospy.init_node('grid_mapping')
         
         # particle filter
-        self.num_particles = 2
+        self.num_particles = 1
         self.particles = [Particle(self.num_particles) for _ in range(self.num_particles)]
         self.cur_time = Time.now().to_sec()
         self.index_of_best_particle = 0
@@ -188,35 +205,6 @@ class SLAM():
         sub = rospy.Subscriber('/sensor_topic', HeaderAndReading,self.grid_mapping_callback)
         # Wait for messages
         rospy.spin()
-
-    # grid_map = list(np.array(grid_map*-1).astype(int).flatten())
-    # def update_map(self, angles, sensors_data, pose, yaw):
-    #     x0 = pose.position.x
-    #     y0 = pose.position.y
-    #     for idx in range(len(angles)):
-    #         angle = angles[idx]+np.deg2rad(45)
-    #         sensor_data = sensors_data[idx]
-    #         if sensor_data <= 0 or sensor_data > self.max_range:
-    #             continue
-    #         x = x0 + sensor_data * np.cos(yaw - angle)
-    #         y = y0 + sensor_data * np.sin(yaw - angle)
-    #         # x = x0 + sensor_data * np.cos(angle + yaw)
-    #         # y = y0 + sensor_data * np.sin(angle + yaw)
-    #         # target cell
-    #         jt = int((x - self.map_center_x) / self.resolution)
-    #         it = int((y - self.map_center_y) / self.resolution)
-    #         # origin cell
-    #         j0 = int((x0 - self.map_center_x) / self.resolution)
-    #         i0 = int((y0 - self.map_center_y) / self.resolution)
-    #         # ray tracing
-    #         rr, cc = line(i0, j0, it, jt)
-    #         for i, j in zip(rr, cc):
-    #             if 0 <= i < self.map_height and 0 <= j < self.map_width:
-    #                 if i == it and j == jt:
-    #                     self.grid_map[i, j] += self.inv_sensor_model_occ - self.prior
-    #                 else:
-    #                     self.grid_map[i, j] += self.inv_sensor_model_free - self.prior
-            
 
     def quaternion_to_yaw(self, pose):
         w = pose.orientation.w
@@ -249,7 +237,8 @@ class SLAM():
         # prediction step
         for i in range(self.num_particles):
             # self.particles[i].prediction_step(u, dt)
-            self.particles[i].prediction_step(pose, yaw)
+            # self.particles[i].pose[2] = normalize_angle(yaw)
+            self.particles[i].prediction_step(u, dt)
 
         # normailze weights
         weights = np.array([p.weight for p in self.particles])
@@ -274,7 +263,7 @@ class SLAM():
             # self.update_map(angles, sensors_data, pose, yaw)
             # map_msg.data = list(np.array(l2p(self.grid_map)*100).astype(int).flatten())
             for i in range(self.num_particles):
-                self.particles[i].correction_step(angles, sensors_data)
+                self.particles[i].correction_step(angles, sensors_data, pose, yaw)
 
             all_weights = np.array([p.weight for p in self.particles])
             self.index_of_best_particle = all_weights.argmax()
