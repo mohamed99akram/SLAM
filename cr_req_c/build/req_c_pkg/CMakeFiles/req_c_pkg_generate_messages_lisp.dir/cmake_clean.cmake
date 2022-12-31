@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "/home/akram/CMP4/CR/Project/cr_req_c/devel/share/common-lisp/ros/req_c_pkg/msg/HeaderAndReading.lisp"
+  "/home/akram/CMP4/CR/Project/cr_req_c/devel/share/common-lisp/ros/req_c_pkg/msg/HeaderAndReadings.lisp"
   "CMakeFiles/req_c_pkg_generate_messages_lisp"
 )
 

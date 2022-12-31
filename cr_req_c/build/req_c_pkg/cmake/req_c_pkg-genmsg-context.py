@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.context.in
 
-messages_str = "/home/akram/CMP4/CR/Project/cr_req_c/src/req_c_pkg/msg/HeaderAndReading.msg"
+messages_str = "/home/akram/CMP4/CR/Project/cr_req_c/src/req_c_pkg/msg/HeaderAndReading.msg;/home/akram/CMP4/CR/Project/cr_req_c/src/req_c_pkg/msg/HeaderAndReadings.msg"
 services_str = ""
 pkg_name = "req_c_pkg"
 dependencies_str = "std_msgs;geometry_msgs"

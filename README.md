@@ -34,6 +34,23 @@ or
 `chmod +x src/req_c_pkg/script/grid_mapping.py`    -> only once   
 `rosrun req_c_pkg grid_mapping.py`
 
+
+# To run SLAM: (v2)
+`cd cr_req_c`  
+`source ./devel/setup.bash`  
+### localization
+`chmod +x src/req_c_pkg/script/localizer.py`    -> only once   
+`rosrun req_c_pkg localizer.py`
+
+### mapping
+`chmod +x src/req_c_pkg/script/slam2.py`    -> only once   
+`rosrun req_c_pkg slam2.py`
+
+# To run SLAM: (v1)
+`cd cr_req_c`  
+`source ./devel/setup.bash`  
+`chmod +x src/req_c_pkg/script/slam2.py`  
+`rosrun req_c_pkg slam.py`
 # To create a new message:
 Follow Document  
 if it needs dependencies:

@@ -8,4 +8,6 @@
   :components ((:file "_package")
     (:file "HeaderAndReading" :depends-on ("_package_HeaderAndReading"))
     (:file "_package_HeaderAndReading" :depends-on ("_package"))
+    (:file "HeaderAndReadings" :depends-on ("_package_HeaderAndReadings"))
+    (:file "_package_HeaderAndReadings" :depends-on ("_package"))
   ))

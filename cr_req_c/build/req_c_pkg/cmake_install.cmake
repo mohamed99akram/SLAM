@@ -38,7 +38,10 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/req_c_pkg/msg" TYPE FILE FILES "/home/akram/CMP4/CR/Project/cr_req_c/src/req_c_pkg/msg/HeaderAndReading.msg")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/req_c_pkg/msg" TYPE FILE FILES
+    "/home/akram/CMP4/CR/Project/cr_req_c/src/req_c_pkg/msg/HeaderAndReading.msg"
+    "/home/akram/CMP4/CR/Project/cr_req_c/src/req_c_pkg/msg/HeaderAndReadings.msg"
+    )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)

@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "/home/akram/CMP4/CR/Project/cr_req_c/devel/include/req_c_pkg/HeaderAndReading.h"
+  "/home/akram/CMP4/CR/Project/cr_req_c/devel/include/req_c_pkg/HeaderAndReadings.h"
   "CMakeFiles/req_c_pkg_generate_messages_cpp"
 )
 
