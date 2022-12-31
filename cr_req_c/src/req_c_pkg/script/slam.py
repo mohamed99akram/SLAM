@@ -47,26 +47,33 @@ class Particle():
         self.grid_map = np.ones((self.map_height, self.map_width)) * self.prior
 
 
-    def prediction_step(self, u, dt):
-        # TODO check if this is correct from lecture
-        # u: speed, angular velocity
-        # dt: time interval
-        # a = 0.01
-        a = 0
-        # TODO maybe will put this equal to zero????
-        vel_noise_std = a * (u[0]**2) + a * (u[1]**2)
+   # def prediction_step(self, u, dt):
+   #     # TODO check if this is correct from lecture
+   #     # u: speed, angular velocity
+   #     # dt: time interval
+   #     # a = 0.01
+   #     a = 0
+   #     print('particle got dt: ', dt)
+   #     # TODO maybe will put this equal to zero????
+   #     vel_noise_std = a * (u[0]**2) + a * (u[1]**2)
         # add sample noise to the control input
-        v = u[0] + np.random.normal(0, vel_noise_std)
-        w = u[1] + np.random.normal(0, vel_noise_std)
-        theta0 = self.pose[2]
-        # account for linear velocity only
-        if w == 0:
-            self.pose[0] += v * dt * np.cos(theta0)
-            self.pose[1] += v * dt * np.sin(theta0)
-        else:
-            self.pose[0] += v/w * (np.sin(theta0 + w*dt) - np.sin(theta0))
-            self.pose[1] += v/w * (-np.cos(theta0 + w*dt) + np.cos(theta0))
-        self.pose[2] += (w + np.random.normal(0, vel_noise_std))* dt #% (2 * np.pi)
+   #     v = u[0] + np.random.normal(0, vel_noise_std)
+   #     w = u[1] + np.random.normal(0, vel_noise_std)
+    #    theta0 = self.pose[2]
+   #     # account for linear velocity only
+    #    if w == 0:
+    #        self.pose[0] += v * dt * np.cos(theta0)
+    #        self.pose[1] += v * dt * np.sin(theta0)
+    #    else:
+     #       self.pose[0] += v/w * (np.sin(theta0 + w*dt) - np.sin(theta0))
+    #        self.pose[1] += v/w * (-np.cos(theta0 + w*dt) + np.cos(theta0))
+    #    self.pose[2] += (w + np.random.normal(0, vel_noise_std))* dt #% (2 * np.pi)
+    
+    def prediction_step(self, pose, yaw):
+    	self.pose[0] = pose.position.x
+    	self.pose[1] = pose.position.y
+    	self.pose[2] = yaw
+
 
     def scan_matching(self, angles, sensors_data):
         # get matched scans (z_expected) to compare with actual sensor data (z_actual)
@@ -78,6 +85,7 @@ class Particle():
             angle = angles[idx]+np.deg2rad(45)
             sensor_data = sensors_data[idx]
             if sensor_data <= 0 or sensor_data > self.max_range:
+                particle_distances.append(self.max_range)
                 continue
             x = x0 + self.max_range * np.cos(yaw - angle)
             y = y0 + self.max_range * np.sin(yaw - angle)
@@ -97,6 +105,7 @@ class Particle():
                     if self.grid_map[i, j] > self.hit_thresh:
                         particle_distances.append(np.linalg.norm([i-it, j-jt])*self.resolution)
                         break
+                        
             else:
                 particle_distances.append(self.max_range)
         
@@ -224,8 +233,8 @@ class SLAM():
 
     
         # odometry
-        # pose = msg.pose.pose
-        # yaw = self.quaternion_to_yaw(pose)
+        pose = msg.pose.pose
+        yaw = self.quaternion_to_yaw(pose)
         twist = msg.twist.twist
         # print('position: ', pose.position)
         # print('orientation: ', pose.orientation)
@@ -239,7 +248,8 @@ class SLAM():
         # TODO take covariance into consideration
         # prediction step
         for i in range(self.num_particles):
-            self.particles[i].prediction_step(u, dt)
+            # self.particles[i].prediction_step(u, dt)
+            self.particles[i].prediction_step(pose, yaw)
 
         # normailze weights
         weights = np.array([p.weight for p in self.particles])
@@ -249,7 +259,7 @@ class SLAM():
             self.particles[i].weight/= weights_sum
 
 
-        self.cur_time = Time.now().to_sec()
+        
         map_msg = OccupancyGrid()
 
         map_msg.header.frame_id = 'robot_map'
@@ -279,10 +289,11 @@ class SLAM():
             self.resample()
 
         bp = self.particles[self.index_of_best_particle]
+        print('d-time: ',Time.now().to_sec() - self.cur_time)
         print('best particle pose: ', bp.pose[0], bp.pose[1], bp.pose[2])
         print('vel: ', u[0], u[1])
             
-            
+        self.cur_time = Time.now().to_sec()
         map_msg.header.stamp = Time.now()
         pub.publish(map_msg)
         # print('grid mapping msg sent')
