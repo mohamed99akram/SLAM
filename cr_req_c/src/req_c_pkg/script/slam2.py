@@ -11,6 +11,8 @@ from std_msgs.msg import String
 from skimage.draw import line
 from scipy.stats import multivariate_normal
 
+import copy
+import random
 # log odds to probability
 
 
@@ -199,7 +201,7 @@ class SLAM():
         pub = rospy.Publisher('/map_topic', OccupancyGrid, queue_size=10)
 
         poses = msg.poses
-
+        print('received new poses: ', poses[0].x, poses[0].y, poses[0].z)
         angles = msg.angles
         sensors_data = msg.sensors_data
 
@@ -244,7 +246,11 @@ class SLAM():
         map_msg.data = np.array(l2p(grid_map)*100).astype(int).flatten().tolist()
         self.prevTime = Time.now().to_sec()
         # print('map sent')
-        self.resample()
+        s = sum([particle.weight for particle in self.particles])
+        neff = 1. / sum([(particle.weight/s) ** 2 for particle in self.particles])
+        if neff < len(self.particles) / 2.:
+            self.particles = self.resample(self.particles)
+            print('resampled')
 
         bp = self.particles[self.index_of_best_particle]
         # print('best particle pose: ', bp.pose[0], bp.pose[1], bp.pose[2])
@@ -254,8 +260,40 @@ class SLAM():
         pub.publish(map_msg)
         # print('grid mapping msg sent')
     
-    def resample(self):
-        pass
+    def resample(self, particles):
+        num_particles = len(particles)
+        new_particles = []
+        weights = [particle.weight for particle in particles]
+
+        # normalize the weight
+        sum_weights = sum(weights)
+        weights = [weight / sum_weights for weight in weights]
+
+        # the cumulative sum
+        cumulative_weights = np.cumsum(weights)
+        normalized_weights_sum = cumulative_weights[len(cumulative_weights) - 1]
+
+        # check: the normalized weights sum should be 1 now (up to float representation errors)
+        assert abs(normalized_weights_sum - 1.0) < 1e-5
+
+        # initialize the step and the current position on the roulette wheel
+        step = normalized_weights_sum / num_particles
+        position = random.uniform(0, normalized_weights_sum)
+        idx = 1
+
+        # walk along the wheel to select the particles
+        for i in range(1, num_particles + 1):
+            position += step
+            if position > normalized_weights_sum:
+                position -= normalized_weights_sum
+                idx = 1
+            while position > cumulative_weights[idx - 1]:
+                idx = idx + 1
+
+            new_particles.append(copy.deepcopy(particles[idx - 1]))
+            new_particles[i - 1].weight = 1 / num_particles
+
+        return new_particles
 
 
 
