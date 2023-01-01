@@ -48,7 +48,7 @@ class Localizer():
     def prediction_step(self,idx, u, dt):
         pose = self.poses[idx]
 
-        a = 1
+        a = 0.5
         print('particle got dt: ', dt)
         
         vel_noise_std = a * (u[0]**2) + a * (u[1]**2)

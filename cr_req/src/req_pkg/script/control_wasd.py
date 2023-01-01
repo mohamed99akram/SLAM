@@ -16,12 +16,12 @@ def main():
     pub = rospy.Publisher('/robot/robotnik_base_control/cmd_vel', Twist, queue_size=10)
     # Get the current time in seconds
     start = Time.now().to_sec()
-    acceleration = 0.1
+    acceleration = 1.0
     angle = 0.0
     max_speed = 20
     while not rospy.is_shutdown():
         # If 5 seconds are passed
-        if Time.now().to_sec() - start >= 5:
+        if Time.now().to_sec() - start >= 0:
             tty.setraw(sys.stdin.fileno())
             rlist, _, _ = select([sys.stdin], [], [], 0.5)
             key = None
@@ -57,7 +57,7 @@ def main():
 
             elif key == 'a':
                 msg.linear.x =  acceleration
-                acceleration+=0.1
+                # acceleration+=0.1
                 acceleration = min(acceleration, max_speed)
                 msg.angular.z = angle
                 angle+=0.1
@@ -65,7 +65,7 @@ def main():
             
             elif key == 'd':
                 msg.linear.x =  acceleration
-                acceleration+=0.1
+                # acceleration+=0.1
                 acceleration = min(acceleration, max_speed)
                 msg.angular.z = angle
                 angle-=0.1

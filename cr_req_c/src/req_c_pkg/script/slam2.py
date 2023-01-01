@@ -91,14 +91,14 @@ class Particle():
                 if 0 <= i < self.map_height and 0 <= j < self.map_width:
                     if self.grid_map[i, j] >= self.prior:
                         # print('hi there!')
-                        particle_distances.append(30 - np.linalg.norm([i-it, j-jt])*self.resolution)
+                        particle_distances.append(self.max_range - np.linalg.norm([i-it, j-jt])*self.resolution)
                         break
                     # else:
                     #     print(self.grid_map[i, j])
                         
             else:
                 # print('--------- 2 --------')
-                particle_distances.append(self.max_range)
+                particle_distances.append(sensor_data)
         
         return np.array(particle_distances)
 
@@ -131,6 +131,7 @@ class Particle():
                 if 0 <= i < self.map_height and 0 <= j < self.map_width:
                     if i == it and j == jt:
                         self.grid_map[i, j] += 0.5 * self.inv_sensor_model_occ - self.prior
+                    # connect previous cell to current cell to fill in the gap
                         if prev_i != -1:
                             rr2, cc2 = line(prev_i, prev_j, i, j)
                             for i2, j2 in zip(rr2, cc2):
@@ -158,8 +159,9 @@ class Particle():
         # # cov = 1
         # print(query_dist)
         # print(mean)
-        # temp = multivariate_normal.pdf(query_dist, mean=mean, cov=100*np.identity(len(sensor_data)))
+        # temp = multivariate_normal.pdf(query_dist, mean=mean, cov=10*np.identity(len(sensor_data)))
         temp = np.exp(-np.linalg.norm(query_dist-mean)**2/(2*100**2))
+        
         print('temp: ', temp)
         if(temp!=0 and not np.isnan(temp)):
             self.weight *= temp
