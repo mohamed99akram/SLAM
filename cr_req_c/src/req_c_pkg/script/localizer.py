@@ -33,7 +33,7 @@ class Localizer():
             '/sensor_topic', HeaderAndReading, self.grid_mapping_callback)
         # Wait for messages
         self.cur_time = Time.now().to_sec()
-        self.num_particles = 1
+        self.num_particles = 5
         self.poses = np.zeros((self.num_particles, 3))
         rospy.spin()
 
@@ -48,7 +48,7 @@ class Localizer():
     def prediction_step(self,idx, u, dt):
         pose = self.poses[idx]
 
-        a = 0.1
+        a = 1
         print('particle got dt: ', dt)
         
         vel_noise_std = a * (u[0]**2) + a * (u[1]**2)
